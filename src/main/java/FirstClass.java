@@ -9,11 +9,10 @@ public class FirstClass {
     public static void main(String[] args) throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         driver.get("https://www.google.com/");
-        String searchFieldXpath = "//input[@type=\"text\"]";
-        WebElement searchElement = driver.findElement(By.xpath(searchFieldXpath));
+        WebElement searchElement = driver.findElement(By.xpath("//input[@type=\"text\"]"));
         searchElement.sendKeys("rozetka ua");
         System.out.println("Search field is displayed " + searchElement.isDisplayed());
         searchElement.submit();
@@ -22,7 +21,7 @@ public class FirstClass {
         searchResults.click();
         System.out.println("Current URL after click is " + driver.getCurrentUrl());
 
-        WebElement searchField = driver.findElement(By.xpath("//input[@class]"));
+        WebElement searchField = driver.findElement(By.xpath("//input[@class=\"search-form__input ng-untouched ng-pristine ng-valid\"]"));
         searchField.click();
         searchField.sendKeys("карамель соленая spell с ванилью 500");
         System.out.println("Search field is displayed " + searchField.isDisplayed());
@@ -31,15 +30,22 @@ public class FirstClass {
         searchButton.click();
         System.out.println("Current URL after click is " + driver.getCurrentUrl());
 
-        WebElement chooseProduct = driver.findElement(By.xpath("//img[@src=\"https://content2.rozetka.com.ua/goods/images/big_tile/27924167.jpg\"]"));
+        WebElement chooseProduct = driver.findElement(By.xpath("//li[1]//div[2]/a[2]"));
         System.out.println("Search product is displayed " + chooseProduct.isDisplayed());
         System.out.println("Product name " + driver.getTitle());
         chooseProduct.click();
-        driver.navigate().refresh();
+        System.out.println("Current URL after click is " + driver.getCurrentUrl());
+        Thread.sleep(2000);
+        WebElement productTitle = driver.findElement(By.xpath("//h1"));
+        productTitle.click();
 
-        WebElement buyButton = driver.findElement(By.xpath("//div[2]/rz-product-main-info/div[2]/div/ul/li[1]/app-product-buy-btn/app-buy-button/button"));
-        System.out.println("Search button is displayed " + buyButton.isDisplayed());
+        WebElement buyButton = driver.findElement(By.xpath("//button[@class=\"buy-button button button_with_icon button_color_green button_size_large ng-star-inserted\"]"));
+        System.out.println("Buy button is enabled " + buyButton.isEnabled());
         buyButton.click();
+
+        WebElement cartTitle = driver.findElement(By.xpath("//h3[@class=\"modal__heading\"]"));
+        System.out.println("Cart is displayed: " + cartTitle.isDisplayed());
+        System.out.println(cartTitle.getText());
 
         driver.close();
     }
